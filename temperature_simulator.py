@@ -11,6 +11,7 @@ complete_url = base_url + "appid=" + api_key + "&q=" + city_name
 def get_weather_data():
     res = requests.get(complete_url)
     data = res.json()
+    print(data)
     data = data["main"]
     print(data)
     temp = data["temp"]

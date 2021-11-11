@@ -5,7 +5,8 @@ import numpy as np
 import time
 import tensorflow as tf
 from tensorflow.keras.models import load_model
-
+from tensorflow import keras
+import time
 model = load_model("saved_model\model.h5")
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 cap = cv2.VideoCapture(
@@ -21,14 +22,16 @@ plt.ion()
 fig = plt.figure()
 ax = fig.add_subplot(111)
 bar = ax.bar(x, y)
-
+s=time.time()
 # setting labels
 plt.xlabel("X-axis")
 plt.ylabel("Y-axis")
 plt.title("Updating plot...")
-
+f=0
 # looping
 while cap.isOpened():
+    if f-s > 0:
+        print(" The frame rate is ", np.round(1/(f-s),2),"fps")
     _, frame = cap.read()
     cv2.imshow("frame", frame)
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -51,6 +54,8 @@ while cap.isOpened():
         break
 
     # to flush the GUI events
+    s=f
+    f=time.time()
     fig.canvas.flush_events()
     time.sleep(0.0001)
 
